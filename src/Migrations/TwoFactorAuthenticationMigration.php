@@ -17,7 +17,7 @@ class TwoFactorAuthenticationMigration extends CustomizableMigration
     {
         $table->id();
 
-        $this->createMorph($table, 'authenticatable');
+        $this->createMorph($table, 'authenticatable', 'two_factor_authenticatable_index');
 
         $table->text('shared_secret');
         $table->timestampTz('enabled_at')->nullable();
