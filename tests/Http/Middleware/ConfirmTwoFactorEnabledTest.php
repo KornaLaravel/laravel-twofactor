@@ -67,6 +67,22 @@ class ConfirmTwoFactorEnabledTest extends TestCase
     {
         $this->app['router']->get('intended_force', function () {
             return 'ok';
+        })->name('intended')->middleware('web', 'auth', '2fa.confirm:true');
+
+        $this->actingAs($this->user);
+
+        $sessionKey = $this->app->make('config')->get('two-factor.confirm.key').'confirm.expires_at';
+
+        $this->session([$sessionKey => now()->addHour()->getTimestamp()]);
+
+        $this->getJson('intended_force')->assertJson(['message' => trans('two-factor::messages.required')]);
+        $this->get('intended_force')->assertRedirect('confirm');
+    }
+
+    public function test_asks_for_confirmation_if_forced_with_custom_route(): void
+    {
+        $this->app['router']->get('intended_force', function () {
+            return 'ok';
         })->name('intended')->middleware('web', 'auth', '2fa.confirm:2fa.confirm,true');
 
         $this->actingAs($this->user);
