@@ -32,9 +32,25 @@ class ConfirmTwoFactorCode
             return $next($request);
         }
 
+        $route = $this->getRedirectionRoute($route);
+
         return $request->expectsJson()
             ? response()->json(['message' => trans('two-factor::messages.required')], 403)
             : response()->redirectGuest(url()->route($route));
+    }
+
+    /**
+     * Determine the route to redirect the user.
+     */
+    protected function getRedirectionRoute($route)
+    {
+        // If the developer is forcing this middleware to always run,
+        // then return redirection route "2fa.confirm" as default.
+        // Otherwise, return the route as the developer set it.
+        if (in_array(strtolower($route), ['true', 'force'], true)) {
+            return '2fa.confirm';
+        }
+        return $route;
     }
 
     /**
