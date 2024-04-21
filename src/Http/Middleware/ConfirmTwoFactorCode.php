@@ -42,7 +42,7 @@ class ConfirmTwoFactorCode
     /**
      * Determine the route to redirect the user.
      */
-    protected function getRedirectionRoute($route)
+    protected function getRedirectionRoute(string $route): string
     {
         // If the developer is forcing this middleware to always run,
         // then return redirection route "2fa.confirm" as default.
