@@ -50,6 +50,7 @@ class ConfirmTwoFactorCode
         if (in_array(strtolower($route), ['true', 'force'], true)) {
             return '2fa.confirm';
         }
+
         return $route;
     }
 
